@@ -1,10 +1,12 @@
 import os
 import time
 from numpy import *
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import *
 from control import *
 from math import *
+from io import BytesIO
 
 os.system('clear')
 M1 =2500.0 #input("Massa sobre cada roda do onibus (Massa do onibus em Kg/4): ")
@@ -32,11 +34,21 @@ print "Sua funcao de transferencia considerando a forca de Controle (U) = 0 eh: 
 
 [y, T] = step(G1 , linspace(0,50,10000))
 plt.plot(T,y)
-plt.show("Fig 1")
+plt.xlabel('time (seconds)')
+plt.ylabel('Amplitude')
+plt.title('Step Response G1-1')
+plt.grid(True)
+plt.savefig("Step_response_G1-1.png")
+plt.show()
 
 [y1, T1] = step(0.1*G2 , linspace(0,50,10000))
 plt.plot(T1,y1)
-plt.show("Fig 2")
+plt.xlabel('time (seconds)')
+plt.ylabel('Amplitude')
+plt.title('Step Response G2-1')
+plt.grid(True)
+plt.savefig("Step_response_G2-1.png")
+plt.show()
 
 
 #PID
@@ -56,6 +68,11 @@ print "Sua funcao de transferencia de PID eh: ", Cs
 closed_loop = F*feedback(F*G1,Cs)
 [y2, T2] = step(closed_loop*0.1, linspace(0,5,100))
 plt.plot(T2,y2)
+plt.xlabel('time (seconds)')
+plt.ylabel('Amplitude')
+plt.title('Closed-Loop Response to 0.1-m High Step w/PID Controller')
+plt.grid(True)
+plt.savefig("ClosedLoop1.png")
 plt.show()
 
 zero1 = 1
@@ -64,10 +81,20 @@ polo1 = 0
 
 Cs = tf([1,zero1+zero2,zero1*zero2],[1,polo1])
 polos, zeros = pzmap.pzmap(Cs*G1)
-plt.show("Fig 4")
+plt.xlabel('Real Axis (1/s)')
+plt.ylabel('Imaginary Axis (1/s)')
+plt.title('Polos and Zeros map')
+plt.grid(True)
+plt.savefig("PZmap.png")
+plt.show()
 
 root_locus(Cs*G1,None,-80)
-plt.show("Fig 5")
+plt.xlabel('Real Axis (1/s)')
+plt.ylabel('Imaginary Axis (1/s)')
+plt.title('Root Locus')
+plt.grid(True)
+plt.savefig("Root_Locus.png")
+plt.show()
 
 Kd = 2*Kd
 Kp = 2*Kp
@@ -79,7 +106,12 @@ closed_loop = F*feedback(F*G1,Cs)
 [y3, T3] = step(0.1*closed_loop , linspace(0,5,100))
 plt.plot(T3,y3)
 axis([0, 5, -0.01, 0.01])
-plt.show("Fig 6")
+plt.xlabel('time (seconds)')
+plt.ylabel('Amplitude')
+plt.title('Closed-Loop Response to 0.1-m High Step w/High-Gain PID Controller')
+plt.grid(True)
+plt.savefig("ClosedLoop1.png")
+plt.show()
 
 
 #Root Locus
